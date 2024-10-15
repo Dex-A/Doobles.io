@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doobles.io</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .chat {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #fff;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        .chat-message {
+            margin-bottom: 10px;
+        }
+        .bot-display {
+            margin-top: 20px;
+            display: flex;
+        }
+        .bot-avatar {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 100px;
+            text-align: center;
+            margin-right: 20px;
+        }
+        .rank-icon {
+            margin-right: 5px;
+        }
+        .bot-obstacle {
+            padding: 10px;
+            background-color: #f0f8ff;
+            border: 1px solid #dcdcdc;
+            width: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Bot Chat Room</h1>
+
+    <div class="chat" id="chat">
+        <!-- Chat messages will appear here -->
+    </div>
+
+    <div class="bot-display">
+        <div class="bot-avatar" id="botAvatar">
+            <!-- Bot status in obstacle course -->
+        </div>
+        <div class="bot-obstacle">
+            Obstacle Course Area
+        </div>
+    </div>
+
+    <script>
+        // Personalities and rank icons
+        const botPersonalities = {
+            "Jokester": ["Laughing", "Goofy", "Jolly", "Witty"],
+            "Helper": ["Helpful", "Supportive", "Kind", "Friendly"],
+            "Explorer": ["Adventurous", "Wandering", "Curious", "Brave"]
+        };
+
+        const nameSuffixes = ["Larry", "Holly", "Aiden", "Max", "Riley", "Sam", "Taylor"];
+        const rankIcons = {
+            "Moderator": "😎",
+            "VIP": "⭐",
+            "Premium": "💎",
+            "Developer": "🛠️",
+            "None": ""
+        };
+
+        // Generate a random bot username based on personality
+        function generateBotUsername(personalityType) {
+            let prefix = botPersonalities[personalityType][Math.floor(Math.random() * botPersonalities[personalityType].length)];
+            let suffix = nameSuffixes[Math.floor(Math.random() * nameSuffixes.length)];
+            return `${prefix}_${suffix}`;
+        }
+
+        // Bot chat behavior based on personality type
+        function botChat(personalityType, message) {
+            if (personalityType === "Jokester") {
+                return `${message} 😂 I can’t stop laughing!`;
+            } else if (personalityType === "Helper") {
+                return `${message} I'm here to help! 😊`;
+            } else if (personalityType === "Explorer") {
+                return `${message} Just found something interesting! 🧭`;
+            }
+            return message;
+        }
+
+        // Display ranks
+        function displayUserRank(rank, username) {
+            let icon = rankIcons[rank] || "";
+            return `${icon} ${username}`;
+        }
+
+        // Simulate mod sleepiness (70% sleepy, 30% alert)
+        function modStatus() {
+            return Math.random() < 0.30 ? "😎" : "😴";
+        }
+
+        // Add chat messages to chat room
+        function addChatMessage(personality, rank, message) {
+            const chatBox = document.getElementById('chat');
+            const username = generateBotUsername(personality);
+            const rankStatus = displayUserRank(rank, username);
+            const chatMessage = botChat(personality, message);
+
+            chatBox.innerHTML += `<div class="chat-message"><strong>${rankStatus}:</strong> ${chatMessage}</div>`;
+        }
+
+        // Display obstacle course interaction
+        function obstacleCourseAction(personalityType) {
+            const botAvatar = document.getElementById('botAvatar');
+            let action;
+
+            if (personalityType === "Jokester") {
+                action = "Jumps around randomly and makes silly movements.";
+            } else if (personalityType === "Helper") {
+                action = "Moves cautiously, occasionally 'assisting' other bots.";
+            } else if (personalityType === "Explorer") {
+                action = "Wanders off to explore new areas, often taking longer routes.";
+            }
+
+            botAvatar.innerHTML = `<p><strong>${personalityType} Bot:</strong></p><p>${action}</p>`;
+        }
+
+        // Initial chat messages and bot interactions
+        addChatMessage("Jokester", "VIP", "Whoa, that was close!");
+        addChatMessage("Helper", "Moderator", "I thought I was helping...");
+        addChatMessage("Explorer", "None", "I just discovered... oh wait, it’s just a wall.");
+        addChatMessage("Jokester", "Premium", "Haha, no worries, Mod!");
+
+        // Show bot interaction in obstacle course
+        obstacleCourseAction("Explorer");
+
+    </script>
+
+</body>
+</html>
